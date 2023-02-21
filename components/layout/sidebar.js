@@ -12,6 +12,9 @@ const sidebar = () => {
         </Link>
         <Link href={"/servicios"}>
           <SideBarIcon icon={<BsTools />} text="Servicios" />
+          </Link>
+        <Link href={"/marcas"}>
+          <SideBarIcon icon={<BsPeople />} text="Marcas" />
         </Link>
       </div>
     </>
