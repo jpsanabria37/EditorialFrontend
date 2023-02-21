@@ -10,6 +10,9 @@ const sidebar = () => {
         <Link href={"/clientes"}>
           <SideBarIcon icon={<BsPeople />} text="Clientes" />
         </Link>
+        <Link href={"/marcas"}>
+          <SideBarIcon icon={<BsPeople />} text="Marcas" />
+        </Link>
       </div>
     </>
   );
