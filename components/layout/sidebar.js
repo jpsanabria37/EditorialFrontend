@@ -1,5 +1,5 @@
 
-import { BsPeople } from "react-icons/bs";
+import { BsPeople,BsTools } from "react-icons/bs";
 
 import Link from "next/link";
 
@@ -9,6 +9,9 @@ const sidebar = () => {
       <div className="fixed top-0 left-0 m-0 flex h-screen w-24 flex-col border-r border-gray-200 bg-white p-6 text-color-dark">
         <Link href={"/clientes"}>
           <SideBarIcon icon={<BsPeople />} text="Clientes" />
+        </Link>
+        <Link href={"/servicios"}>
+          <SideBarIcon icon={<BsTools />} text="Servicios" />
         </Link>
       </div>
     </>
