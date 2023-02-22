@@ -1,6 +1,6 @@
 
 import { BsPeople, BsFillCollectionFill } from "react-icons/bs";
-import { BsPeople,BsTools } from "react-icons/bs";
+import { BsTools } from "react-icons/bs";
 
 import Link from "next/link";
 
