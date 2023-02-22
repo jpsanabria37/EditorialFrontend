@@ -1,11 +1,12 @@
-import fetch from 'node-fetch';
-import Link from "next/link";
 import Dashboard from "../../layouts/dashboard";
 
-export default function Home({ cliente }) {
+
+export default function Home() {
     return (
         <>
-            <Dashboard></Dashboard>
+            <Dashboard>
+                Este es el index
+            </Dashboard>
         </>
     )
 }

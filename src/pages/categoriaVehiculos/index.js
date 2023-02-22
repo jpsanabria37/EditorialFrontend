@@ -4,13 +4,13 @@ import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
 
 
-export default function ListadoClientes({ clientes }) {
+export default function CategoriaVehiculosList({ cVehiculos }) {
     return (
 
         <Dashboard>
             <Link href={"/clientes/crear"}>
                 <button className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
-                    Nuevo cliente
+                    Nueva categoria
                 </button>
             </Link>
             <div className=" hidden overflow-auto rounded-xl shadow md:block">
@@ -21,55 +21,29 @@ export default function ListadoClientes({ clientes }) {
                             Nombre
                         </th>
                         <th className="p-3 text-left text-sm font-semibold tracking-wide">
-                            Apellido
+                            Descripción
                         </th>
-                        <th className="w-36 p-3 text-left text-sm font-semibold tracking-wide">
-                            Edad
-                        </th>
-                        <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                            Telefono
-                        </th>
-                        <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                            Email
-                        </th>
-                        <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                            Direccion
-                        </th>
+
                         <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
                             Acciones
                         </th>
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                    {clientes?.map((cliente) => (
-                        <tr key={cliente.Id}>
+                    {cVehiculos?.map((cVehiculo) => (
+                        <tr key={cVehiculo.Id}>
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {cliente.Nombre}
+                                {cVehiculo.Nombre}
                             </td>
 
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {cliente.Apellido}
+                                {cVehiculo.Descripcion}
                             </td>
 
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {cliente.Edad}
-                            </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {" "}
-                                {cliente.Telefono}
-                            </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {cliente.Email}
-                            </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-
-                                {cliente.Direccion}
-                            </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                <Link href={`/clientes/${cliente.Id}`}>
+                                <Link href={`/categoriaVehiculos/${cVehiculo.Id}`}>
                                     <HiPencilAlt/>
                                 </Link>
-
                             </td>
                         </tr>
                     ))}
@@ -77,21 +51,18 @@ export default function ListadoClientes({ clientes }) {
                 </table>
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:hidden ">
-                {clientes?.map((cliente) => (
-                    <div key={cliente.Id} className="space-y-3 rounded-lg bg-white p-4 shadow">
+                {cVehiculos?.map((cVehiculo) => (
+                    <div key={cVehiculo.Id} className="space-y-3 rounded-lg bg-white p-4 shadow">
                         <div className="flex items-center space-x-2 text-sm">
                             <div className="whitespace-nowrap text-sm text-gray-600">
-                                {cliente.Nombre}
+                                {cVehiculo.Nombre}
                             </div>
                             <div className="whitespace-nowrap text-sm text-gray-600">
 
                             </div>
                         </div>
                         <div className="whitespace-nowrap text-sm text-gray-600">
-
-                        </div>
-                        <div className="whitespace-nowrap text-sm text-black">
-
+                            {cVehiculo.Descripcion}
                         </div>
                     </div>
                 ))}
@@ -103,8 +74,8 @@ export default function ListadoClientes({ clientes }) {
 export const getServerSideProps = async () => {
     const https = require('https');
     const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Cliente`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1CategoriaVehiculo`, { agent });
     const data = await res.json();
-    const clientes = data.Data || [];
-    return { props: { clientes } };
+    const cVehiculos = data.Data || [];
+    return { props: { cVehiculos } };
 };
