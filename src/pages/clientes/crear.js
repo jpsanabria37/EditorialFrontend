@@ -126,8 +126,13 @@ const creeateForm = () => {
                     disabled={submitting}
                     className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
                 >
-                    {submitting ? "Enviando ..." : "Enviar"}
+                    {submitting ? <div> <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
+                        <!-- ... -->
+                    </svg>
+                        Processing...</div> : "Enviar"}
                 </button>
+
+
                 {errors}
             </form>
 
