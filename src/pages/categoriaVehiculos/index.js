@@ -2,17 +2,33 @@ import fetch from 'node-fetch';
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
+import { useState } from 'react';
+import Modal from "../../../components/modal";
 
 
 export default function CategoriaVehiculosList({ cVehiculos }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+
+
     return (
 
         <Dashboard>
-            <Link href={"/clientes/crear"}>
-                <button className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
-                    Nueva categoria
-                </button>
-            </Link>
+            <button
+                onClick={handleOpenModal}
+                className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+            >
+                Crear uno nuevo
+            </button>
+            {isModalOpen && <Modal onClose={handleCloseModal} />}
             <div className=" hidden overflow-auto rounded-xl shadow md:block">
                 <table className="w-full hover:cursor-auto">
                     <thead className="border-b-2 border-gray-200 bg-gray-50">
