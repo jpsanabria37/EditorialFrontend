@@ -1,10 +1,32 @@
 import fetch from 'node-fetch';
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
-import { HiPencilAlt } from "react-icons/hi";
+import { HiPencilAlt,HiTrash } from "react-icons/hi";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 
 export default function ServiciosList({ servicios }) {
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+  
+    async function deleteAndReload (id) {
+      setIsLoading(true);
+      try {
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio/${id}`);
+        if (response.ok) {
+          // Si la petición se ha realizado correctamente, navegamos al mismo componente para actualizar la lista de elementos
+          router.push('/servicios');
+        } else {
+          console.error('Error al eliminar el elemento');
+        }
+      } catch (error) {
+        console.error('Error al realizar la petición DELETE:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
     return (
 
         <Dashboard>
@@ -37,11 +59,19 @@ export default function ServiciosList({ servicios }) {
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                                 {servicio.Descripcion}
                             </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                <Link href={`/servicios/${servicio.Id}`}>
+                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700 flex flex-row">
+                                
+                                <Link href={`/servicios/${servicio.Id}`} className="pr-5">
                                     <HiPencilAlt/>
                                 </Link>
-
+                                
+                                {isLoading ? (
+                                    <p>Eliminando elemento...</p>
+                                ) : (
+                                    <button onClick={() => deleteAndReload(servicio.Id)}>
+                                    <HiTrash/>
+                                </button>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -60,10 +90,13 @@ export default function ServiciosList({ servicios }) {
                             </div>
                         </div>
                         <div className="whitespace-nowrap text-sm text-black">
-                        <Link href={`/servicios/${servicio.Id}`}>
+                        
+                        <Link href={`/servicios/${servicio.Id}`} className="pr-5">
                                     <HiPencilAlt/>
-                                </Link>
-
+                        </Link>
+                        <button onClick={() => deleteAndReload(servicio.Id)}>
+                                    <HiTrash/>
+                        </button>
                         </div>
                     </div>
                 ))}
@@ -75,7 +108,7 @@ export default function ServiciosList({ servicios }) {
 export const getServerSideProps = async () => {
     const https = require('https');
     const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Servicio`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`, { agent });
     const data = await res.json();
     const servicios = data.Data || [];
     return { props: { servicios } };

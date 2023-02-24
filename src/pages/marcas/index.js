@@ -71,7 +71,7 @@ export default function Home({ marcas }) {
 export const getServerSideProps = async () => {
     const https = require('https');
     const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Marca`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Marca`, { agent });
     const data = await res.json();
     const marcas = data.Data || [];
     return { props: { marcas } };

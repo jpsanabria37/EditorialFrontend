@@ -2,6 +2,10 @@ import fetch from 'node-fetch';
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
+import Modal from 'components/modal';
+import Modaltests from 'components/modaltests';
+
+
 
 
 export default function ListadoClientes({ clientes }) {
@@ -103,7 +107,7 @@ export default function ListadoClientes({ clientes }) {
 export const getServerSideProps = async () => {
     const https = require('https');
     const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Cliente`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`, { agent });
     const data = await res.json();
     const clientes = data.Data || [];
     return { props: { clientes } };

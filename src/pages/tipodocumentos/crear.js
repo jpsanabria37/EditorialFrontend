@@ -17,7 +17,7 @@ const creeateForm = () => {
         e.preventDefault();
         setSubmitting(true);
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1TipoDocumento`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`,
             {
                 method: "POST",
                 headers: {

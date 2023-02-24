@@ -2,12 +2,14 @@ import fetch from 'node-fetch';
 import Image from 'next/image'
 import Dashboard from "../../../../layouts/dashboard";
 
+
+
 const https = require('https');
 const agent = new https.Agent({ rejectUnauthorized: false });
 export async function getStaticPaths() {
 
     // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Servicio`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`, { agent });
     const data = await res.json();
     const servicios = data.Data;
     // Generamos un array con los IDs de los clientes
@@ -23,7 +25,7 @@ export async function getStaticProps({ params }) {
     const { sid } = params;
 
     // Hacemos una petición para obtener los datos del cliente según su ID
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Servicio/${sid}`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio/${sid}`, { agent });
     const data = await res.json();
     const servicio = data.Data;
 
@@ -35,17 +37,9 @@ export async function getStaticProps({ params }) {
 }
 
 
-async function deleteData({ sid }) {
-    try {
-        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Servicio/${sid}`);
-        console.log(response.data);
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 
-const ServicioDetail = ({ servicio = {} }) => {
+function ServicioDetail  ({ servicio = {} }) {
     return (
         <>
             <Dashboard>
@@ -57,27 +51,23 @@ const ServicioDetail = ({ servicio = {} }) => {
                                         <Image
                                             className="h-48 w-full object-cover md:w-48"
                                             src="/images/user_default.png"
-                                            alt="cliente"
+                                            alt="Servicio"
                                             width={500}
                                             height={500}
                                         />
                                 </div>
                                 <div className="p-8">
                                     <div
-                                        className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Cliente
+                                        className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Servicio
                                     </div>
                                     <h1 className="block mt-1 text-lg leading-tight font-medium text-black">{servicio.Nombre}
                                       </h1>
-                                    <p className="mt-2 text-gray-500">Edad: {servicio.Descripcion}</p>
+                                    <p className="mt-2 text-gray-500">{servicio.Descripcion}</p>
                                     <div className="flex mt-4">
                                         <button
                                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Editar
                                         </button>
-                                        <button
-                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                            onClick={deleteData(servicio.Id)}
-                                        >Borrar
-                                        </button>
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@ const agent = new https.Agent({ rejectUnauthorized: false });
 export async function getStaticPaths() {
 
     // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1CategoriaVehiculo`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo`, { agent });
     const data = await res.json();
     const cVehiculos= data.Data;
     // Generamos un array con los IDs de los clientes
@@ -23,7 +23,7 @@ export async function getStaticProps({ params }) {
     const { cvid } = params;
 
     // Hacemos una petición para obtener los datos del cliente según su ID
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1CategoriaVehiculo/${cvid}`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo/${cvid}`, { agent });
     const data = await res.json();
     const cVehiculo = data.Data;
 
@@ -37,7 +37,7 @@ export async function getStaticProps({ params }) {
 
 async function deleteData({ cvid }) {
     try {
-        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1Cliente/${cid}`);
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo/${cid}`);
         console.log(response.data);
     } catch (error) {
         console.error(error);

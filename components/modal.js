@@ -3,7 +3,7 @@ import { useState } from 'react';
 function Modal({ onClose }) {
     const [formState, setFormState] = useState({
         name: '',
-        email: '',
+        descripcion: '',
         message: '',
     });
 
