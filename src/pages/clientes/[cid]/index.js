@@ -2,12 +2,10 @@ import fetch from 'node-fetch';
 import Image from 'next/image'
 import Dashboard from "../../../../layouts/dashboard";
 
-const https = require('https');
-const agent = new https.Agent({ rejectUnauthorized: false });
 export async function getStaticPaths() {
 
     // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`);
     const data = await res.json();
     const clientes = data.Data;
     // Generamos un array con los IDs de los clientes
@@ -23,7 +21,7 @@ export async function getStaticProps({ params }) {
     const { cid } = params;
 
     // Hacemos una petición para obtener los datos del cliente según su ID
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cid}`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cid}`);
     const data = await res.json();
     const cliente = data.Data;
 

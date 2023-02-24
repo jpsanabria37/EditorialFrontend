@@ -77,9 +77,7 @@ export default function TipoDocumentoList({ tipodocumentos }) {
 }
 
 export const getServerSideProps = async () => {
-    const https = require('https');
-    const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`);
     const data = await res.json();
     const tipodocumentos = data.Data || [];
     return { props: { tipodocumentos } };

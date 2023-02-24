@@ -7,7 +7,7 @@ const agent = new https.Agent({ rejectUnauthorized: false });
 export async function getStaticPaths() {
 
     // Aquí puedes obtener la lista de clientes para generar rutas estáticas
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`);
     const data = await res.json();
     const tipodocumentos = data.Data;
     // Generamos un array con los IDs de los clientes
@@ -23,7 +23,7 @@ export async function getStaticProps({ params }) {
     const { tid } = params;
 
     // Hacemos una petición para obtener los datos del cliente según su ID
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento/${tid}`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento/${tid}`);
     const data = await res.json();
     const tipodocumento = data.Data;
 
@@ -80,34 +80,6 @@ const TipoDocumentoDetail = ({ tipodocumento = {} }) => {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="overflow-x-auto">
-                                <table className="mt-4 w-full">
-                                    <thead>
-                                    <tr>
-                                        <th className="px-4 py-2 bg-gray-200 text-gray-600 border">Fecha</th>
-                                        <th className="px-4 py-2 bg-gray-200 text-gray-600 border">Producto</th>
-                                        <th className="px-4 py-2 bg-gray-200 text-gray-600 border">Precio</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody className="text-gray-600">
-                                    <tr>
-                                        <td className="px-4 py-2 border">2022-02-18</td>
-                                        <td className="px-4 py-2 border">Producto 1</td>
-                                        <td className="px-4 py-2 border">$10.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 border">2022-02-17</td>
-                                        <td className="px-4 py-2 border">Producto 2</td>
-                                        <td className="px-4 py-2 border">$20.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-4 py-2 border">2022-02-16</td>
-                                        <td className="px-4 py-2 border">Producto 3</td>
-                                        <td className="px-4 py-2 border">$30.00</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>

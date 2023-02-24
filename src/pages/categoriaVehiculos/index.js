@@ -88,9 +88,7 @@ export default function CategoriaVehiculosList({ cVehiculos }) {
 }
 
 export const getServerSideProps = async () => {
-    const https = require('https');
-    const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo`);
     const data = await res.json();
     const cVehiculos = data.Data || [];
     return { props: { cVehiculos } };

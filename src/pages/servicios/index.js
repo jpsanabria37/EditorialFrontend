@@ -15,7 +15,7 @@ export default function ServiciosList({ servicios }) {
       setIsLoading(true);
       try {
         const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio/${id}`);
-        if (response.ok) {
+        if (response.data.succeeded == true) {
           // Si la petición se ha realizado correctamente, navegamos al mismo componente para actualizar la lista de elementos
           router.push('/servicios');
         } else {
@@ -64,13 +64,13 @@ export default function ServiciosList({ servicios }) {
                                 <Link href={`/servicios/${servicio.Id}`} className="pr-5">
                                     <HiPencilAlt/>
                                 </Link>
-                                
+
                                 {isLoading ? (
                                     <p>Eliminando elemento...</p>
                                 ) : (
                                     <button onClick={() => deleteAndReload(servicio.Id)}>
-                                    <HiTrash/>
-                                </button>
+                                        <HiTrash/>
+                                    </button>
                                 )}
                             </td>
                         </tr>
@@ -106,9 +106,7 @@ export default function ServiciosList({ servicios }) {
 }
 
 export const getServerSideProps = async () => {
-    const https = require('https');
-    const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`, { agent });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`);
     const data = await res.json();
     const servicios = data.Data || [];
     return { props: { servicios } };
