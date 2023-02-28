@@ -1,6 +1,8 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/router";
+import ErrorsList from "../../../components/errorsList";
+import ErrorListProperty from "../../../components/errorListProperty";
 
 const creeateForm = () => {
     const router = useRouter();
@@ -12,37 +14,41 @@ const creeateForm = () => {
 
     const [errors, setErrors] = useState([]);
 
+
+
     async function handleSubmit(e) {
 
         e.preventDefault();
         setSubmitting(true);
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`,
-            {
-                method: "POST",
-                headers: {
-                    accept: "application/json",
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    tipo: tipo,
-                    descripcion: descripcion,
-                   
-                }),
+        try{
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/TipoDocumento`,
+                {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        tipo: tipo,
+                        descripcion: descripcion,
+                    
+                    }),
+                }
+            );
+            if (res.ok) {
+                setErrors([]);
+                setTipo("");
+                setDescripcion("");
+            
+                return router.push("/tipodocumentos");
             }
-        );
+            const data = await res.json();
+            setErrors(data.errors);
+            setSubmitting(false);
+        }catch (errors){
 
-        if (res.ok) {
-            setErrors([]);
-            setTipo("");
-            setDescripcion("");
-        
-            return router.push("/tipodocumentos");
         }
-
-        const data = await res.json();
-        setErrors(data.errors);
-        setSubmitting(false);
     }
     return (
         <>
@@ -61,6 +67,7 @@ const creeateForm = () => {
                     disabled={submitting}
                     placeholder="Tipo"
                 />
+                {errors.Tipo && <ErrorListProperty errors={errors.Tipo} />}
 
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
@@ -71,6 +78,7 @@ const creeateForm = () => {
                     disabled={submitting}
                     placeholder="Descripcion"
                 />
+                {errors.Descripcion && <ErrorListProperty errors={errors.Descripcion} />}
 
                 <button
                     type="submit"
@@ -90,7 +98,7 @@ const creeateForm = () => {
 
                 </button>
 
-                {errors}
+                {Object.keys(errors).length > 0 && <ErrorsList errors={errors}></ErrorsList>}
             </form>
 
         </>
