@@ -33,39 +33,6 @@ const creeateForm = ({tipoDocumentos}) => {
     async function handleSubmit(e) {
         e.preventDefault();
         setSubmitting(true);
-
-      /*  try {
-            const res = await axios.post('http://localhost:5112/api/v1/Cliente', {
-                nombre: nombre,
-                apellido: apellido,
-                fechaNacimiento: fechaNacimiento,
-                telefono: telefono,
-                email: email,
-                direccion: direccion,
-                numeroDocumento : numeroDocumento,
-                tipoDocumentoId: 1
-
-            });
-
-            setErrors([]);
-            setNombre("");
-            setApellido("");
-            setFechaNacimiento("");
-            setTelefono("");
-            setEmail("");
-            setDireccion("");
-
-            console.log("melo");
-
-
-
-        } catch (error) {
-            console.log("esta chimbada no sirve");
-            console.error(error);
-            setSubmitting(false);
-
-
-        } */
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
@@ -100,20 +67,12 @@ const creeateForm = ({tipoDocumentos}) => {
 
                 return router.push("/clientes");
             }
-
             const data = await res.json();
             setErrors(data.errors);
             setSubmitting(false);
-
-
         }catch (errors){
 
         }
-
-
-
-
-
     }
     return (
         <>

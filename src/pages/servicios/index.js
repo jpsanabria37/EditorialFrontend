@@ -2,31 +2,11 @@ import fetch from 'node-fetch';
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt,HiTrash } from "react-icons/hi";
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+
 
 
 export default function ServiciosList({ servicios }) {
-    const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
-  
-    async function deleteAndReload (id) {
-      setIsLoading(true);
-      try {
-        const response = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio/${id}`);
-        if (response.data.succeeded == true) {
-          // Si la petición se ha realizado correctamente, navegamos al mismo componente para actualizar la lista de elementos
-          router.push('/servicios');
-        } else {
-          console.error('Error al eliminar el elemento');
-        }
-      } catch (error) {
-        console.error('Error al realizar la petición DELETE:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
+
     return (
 
         <Dashboard>
@@ -65,13 +45,6 @@ export default function ServiciosList({ servicios }) {
                                     <HiPencilAlt/>
                                 </Link>
 
-                                {isLoading ? (
-                                    <p>Eliminando elemento...</p>
-                                ) : (
-                                    <button onClick={() => deleteAndReload(servicio.Id)}>
-                                        <HiTrash/>
-                                    </button>
-                                )}
                             </td>
                         </tr>
                     ))}

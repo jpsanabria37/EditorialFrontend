@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import ErrorsList from "../../../components/errorsList";
+import ErrorListProperty from "../../../components/errorListProperty";
 
 const CrearNuevoServicio = () => {
     const router = useRouter();
@@ -78,9 +79,7 @@ const CrearNuevoServicio = () => {
                     placeholder="Nombre"
                 />
 
-                {errors.Nombre && errors.Nombre.map((error, index) => (
-                    <div key={index}>{error}</div>
-                ))}
+                {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
 
 
                 <input
@@ -93,9 +92,7 @@ const CrearNuevoServicio = () => {
                     placeholder="Descripcion"
                 />
 
-                {errors.Descripcion && errors.Descripcion.map((error, index) => (
-                    <div key={index}>{error}</div>
-                ))}
+                {errors.Descripcion && <ErrorListProperty errors={errors.Descripcion} />}
 
 
 
