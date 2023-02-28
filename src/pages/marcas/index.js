@@ -38,7 +38,7 @@ export default function ListadoMarcas({ marcas }) {
                                 {marca.Nombre}
                             </td>
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {marca.CategoriaVehiculoNombre}
+                                {marca.CategoriaVehiculo.Nombre}
                             </td>
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                                 <Link href={`/marcas/${marca.Id}`}>
