@@ -1,7 +1,8 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import ErrorsList from "../../../components/errorsList";
 
-const creeateForm = () => {
+const CrearNuevoServicio = () => {
     const router = useRouter();
     const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
@@ -15,33 +16,49 @@ const creeateForm = () => {
 
         e.preventDefault();
         setSubmitting(true);
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`,
-            {
-                method: "POST",
-                headers: {
-                    accept: "application/json",
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    nombre: nombre,
-                    descripcion: descripcion,
 
-                }),
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`,
+                {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        descripcion: descripcion,
+
+                    }),
+                }
+            );
+
+            if (!res.ok) {
+                const data = await res.json();
+                console.log(data); // Aquí está el cuerpo de la respuesta como objeto JSON
+                setErrors(data.errors);
+                console.log(errors);
+                setSubmitting(false);
             }
-        );
 
-        if (res.ok) {
+            const data = await res.json();
+
             setErrors([]);
             setNombre("");
             setDescripcion("");
 
             return router.push("/servicios");
+            // hacer algo con los datos devueltos por la API
+
+        } catch (error) {
+            console.log(error);
+
+            // establecer submitting a false para habilitar el botón de envío nuevamente
+            setSubmitting(false);
         }
 
-        const data = await res.json();
-        setErrors(data.errors);
-        setSubmitting(false);
+
     }
     return (
         <>
@@ -61,6 +78,11 @@ const creeateForm = () => {
                     placeholder="Nombre"
                 />
 
+                {errors.Nombre && errors.Nombre.map((error, index) => (
+                    <div key={index}>{error}</div>
+                ))}
+
+
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
                     id="grid-apellido"
@@ -70,6 +92,12 @@ const creeateForm = () => {
                     disabled={submitting}
                     placeholder="Descripcion"
                 />
+
+                {errors.Descripcion && errors.Descripcion.map((error, index) => (
+                    <div key={index}>{error}</div>
+                ))}
+
+
 
                 <button
                     type="submit"
@@ -89,11 +117,16 @@ const creeateForm = () => {
 
                 </button>
 
-                {errors}
+                {Object.keys(errors).length > 0 && <ErrorsList errors={errors} />}
+
             </form>
+
+
+
+
 
         </>
     );
 };
 
-export default creeateForm;
+export default CrearNuevoServicio;

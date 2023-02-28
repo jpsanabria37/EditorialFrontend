@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { getTipoDocumentos } from "@/utils/api/api";
 import axios from "axios";
+import ErrorsList from "../../../components/errorsList";
+import ErrorListProperty from "../../../components/errorListProperty";
 
 export const getStaticProps = async () => {
     const tipoDocumentos = await getTipoDocumentos();
@@ -64,44 +66,52 @@ const creeateForm = ({tipoDocumentos}) => {
 
 
         } */
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
+                {
+                    method: "POST",
+                    headers: {
+                        accept: "application/json",
+                        "content-type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        nombre: nombre,
+                        apellido: apellido,
+                        fechaNacimiento: fechaNacimiento,
+                        telefono: telefono,
+                        email: email,
+                        direccion: direccion,
+                        numeroDocumento : numeroDocumento,
+                        tipoDocumentoId: parseInt(selectedOption)
+                    }),
+                }
+            );
 
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
-            {
-                method: "POST",
-                headers: {
-                    accept: "application/json",
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                    nombre: nombre,
-                    apellido: apellido,
-                    fechaNacimiento: fechaNacimiento,
-                    telefono: telefono,
-                    email: email,
-                    direccion: direccion,
-                    numeroDocumento : numeroDocumento,
-                    tipoDocumentoId: parseInt(selectedOption)
-                }),
+            if (res.ok) {
+                setErrors([]);
+                setNombre("");
+                setApellido("");
+                setFechaNacimiento("");
+                setTelefono("");
+                setEmail("");
+                setDireccion("");
+                setNumeroDocumento("");
+
+                return router.push("/clientes");
             }
-        );
 
-        if (res.ok) {
-            setErrors([]);
-            setNombre("");
-            setApellido("");
-            setFechaNacimiento("");
-            setTelefono("");
-            setEmail("");
-            setDireccion("");
-            setNumeroDocumento("");
+            const data = await res.json();
+            setErrors(data.errors);
+            setSubmitting(false);
 
-            return router.push("/clientes");
+
+        }catch (errors){
+
         }
 
-        const data = await res.json();
-        setErrors(data.errors);
-        setSubmitting(false);
+
+
 
 
     }
@@ -122,6 +132,8 @@ const creeateForm = ({tipoDocumentos}) => {
                     disabled={submitting}
                     placeholder="Nombre"
                 />
+                {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+
 
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
@@ -133,6 +145,9 @@ const creeateForm = ({tipoDocumentos}) => {
                     placeholder="Apellido"
                 />
 
+                {errors.Apellido && <ErrorListProperty errors={errors.Apellido} />}
+
+
                 <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
                     {tipoDocumentos.map(option => (
                         <option key={option.Id} value={option.Id}>
@@ -140,6 +155,8 @@ const creeateForm = ({tipoDocumentos}) => {
                         </option>
                     ))}
                 </select>
+
+
 
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
@@ -151,6 +168,9 @@ const creeateForm = ({tipoDocumentos}) => {
                     placeholder="Número documento"
                     required={true}
                 />
+
+                {errors.NumeroDocumento && <ErrorListProperty errors={errors.NumeroDocumento} />}
+
 
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
@@ -173,6 +193,8 @@ const creeateForm = ({tipoDocumentos}) => {
                     placeholder="Teléfono"
                 />
 
+                {errors.Telefono && <ErrorListProperty errors={errors.Telefono} />}
+
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
                     id="grid-email"
@@ -183,6 +205,8 @@ const creeateForm = ({tipoDocumentos}) => {
                     placeholder="Correo electrónico"
                 />
 
+                {errors.Email && <ErrorListProperty errors={errors.Email} />}
+
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
                     id="grid-direccion"
@@ -192,6 +216,8 @@ const creeateForm = ({tipoDocumentos}) => {
                     disabled={submitting}
                     placeholder="Dirección"
                 />
+
+                {errors.Direccion && <ErrorListProperty errors={errors.Direccion} />}
 
                 <button
                     type="submit"
@@ -211,7 +237,7 @@ const creeateForm = ({tipoDocumentos}) => {
                    
                 </button>
 
-                {errors}
+                {Object.keys(errors).length > 0 && <ErrorsList errors={errors}></ErrorsList>}
             </form>
 
         </>
