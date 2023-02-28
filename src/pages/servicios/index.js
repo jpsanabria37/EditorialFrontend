@@ -78,7 +78,7 @@ export default function ServiciosList({ servicios }) {
     );
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`);
     const data = await res.json();
     const servicios = data.Data || [];

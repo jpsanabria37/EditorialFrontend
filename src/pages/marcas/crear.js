@@ -1,13 +1,18 @@
 
-import { use, useState } from "react";
+import {  useState } from "react";
 import { useRouter } from "next/router";
 import ErrorsList from "../../../components/errorsList";
 import ErrorListProperty from "../../../components/errorListProperty";
+import {getCategoriaVehiculos} from "@/utils/api/api";
 
-const creeateForm = () => {
+export const getStaticProps = async () => {
+    const categoriaVehiculos = await getCategoriaVehiculos();
+    return { props: { categoriaVehiculos } };
+};
+const creeateForm = ({ categoriaVehiculos }) => {
     const router = useRouter();
-    const [marca, setMarca] = useState("");
- 
+    const [nombre, setNombre] = useState("");
+    const [selectedOptionCategoriaVehiculo, setSelectedOptionCategoriaVehiculo] = useState(1);
     
 
     const [submitting, setSubmitting] = useState(false);
@@ -30,24 +35,24 @@ const creeateForm = () => {
                         "content-type": "application/json",
                     },
                     body: JSON.stringify({
-                        marca: marca
-                        
-                    
+                        nombre: nombre,
+                        categoriaVehiculoId: parseInt(selectedOptionCategoriaVehiculo)
                     }),
                 }
             );
             if (res.ok) {
                 setErrors([]);
-                setMarca("");
-               
+                setNombre("");
             
                 return router.push("/marcas");
             }
+
             const data = await res.json();
             setErrors(data.errors);
             setSubmitting(false);
-        }catch (errors){
 
+        }catch (errors){
+            setSubmitting(false);
         }
     }
     return (
@@ -58,16 +63,24 @@ const creeateForm = () => {
             >
                 <h1 className=" text-3xl font-semibold"> Crear Marca</h1>
 
+                <select value={selectedOptionCategoriaVehiculo} onChange={(e) => setSelectedOptionCategoriaVehiculo(e.target.value)}>
+                    {categoriaVehiculos.map(option => (
+                        <option key={option.Id} value={option.Id}>
+                            {option.Nombre}
+                        </option>
+                    ))}
+                </select>
+
                 <input
                     className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-                    id="grid-tipo"
+                    id="grid-nombre"
                     type="text"
-                    onChange={(e) => setMarca(e.target.value)}
-                    value={marca}
+                    onChange={(e) => setNombre(e.target.value)}
+                    value={nombre}
                     disabled={submitting}
                     placeholder="Marca"
                 />
-                {errors.Marca && <ErrorListProperty errors={errors.Marca} />}
+                {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
 
                
 

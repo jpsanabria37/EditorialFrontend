@@ -1,10 +1,11 @@
-import fetch from 'node-fetch';
+
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
+import {getMarcas} from "@/utils/api/api";
 
 
-export default function Home({ marcas }) {
+export default function ListadoMarcas({ marcas }) {
     return (
 
         <Dashboard>
@@ -20,6 +21,10 @@ export default function Home({ marcas }) {
                         <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
                             Nombre
                         </th>
+
+                        <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
+                            Categoría Vehículo
+                        </th>
                         
                         <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
                             Acciones
@@ -32,7 +37,9 @@ export default function Home({ marcas }) {
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                                 {marca.Nombre}
                             </td>
-                            
+                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
+                                {marca.CategoriaVehiculoNombre}
+                            </td>
                             <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                                 <Link href={`/marcas/${marca.Id}`}>
                                     <HiPencilAlt/>
@@ -68,11 +75,7 @@ export default function Home({ marcas }) {
     );
 }
 
-export const getServerSideProps = async () => {
-    const https = require('https');
-    const agent = new https.Agent({ rejectUnauthorized: false });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Marca`);
-    const data = await res.json();
-    const marcas = data.Data || [];
+export const getStaticProps = async () => {
+    const marcas = await getMarcas();
     return { props: { marcas } };
 };

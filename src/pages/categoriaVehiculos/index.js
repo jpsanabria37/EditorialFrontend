@@ -1,34 +1,18 @@
-import fetch from 'node-fetch';
+
 import Link from "next/link";
 import Dashboard from "../../../layouts/dashboard";
 import { HiPencilAlt } from "react-icons/hi";
-import { useState } from 'react';
-import Modal from "../../../components/modal";
+
+import {getCategoriaVehiculos} from "@/utils/api/api";
 
 
 export default function CategoriaVehiculosList({ cVehiculos }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
 
 
     return (
 
         <Dashboard>
-            <button
-                onClick={handleOpenModal}
-                className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-            >
-                Crear uno nuevo
-            </button>
-            {isModalOpen && <Modal onClose={handleCloseModal} />}
+
             <div className=" hidden overflow-auto rounded-xl shadow md:block">
                 <table className="w-full hover:cursor-auto">
                     <thead className="border-b-2 border-gray-200 bg-gray-50">
@@ -87,9 +71,7 @@ export default function CategoriaVehiculosList({ cVehiculos }) {
     );
 }
 
-export const getServerSideProps = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/CategoriaVehiculo`);
-    const data = await res.json();
-    const cVehiculos = data.Data || [];
+export const getStaticProps = async () => {
+    const cVehiculos = await getCategoriaVehiculos();
     return { props: { cVehiculos } };
 };
