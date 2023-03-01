@@ -16,14 +16,17 @@ export default function ListadoClientes({ clientes }) {
                 <table className="w-full hover:cursor-auto">
                     <thead className="border-b-2 border-gray-200 bg-gray-50">
                     <tr>
-                        <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
+                        <th className="p-3 text-left text-sm font-semibold tracking-wide">
                             Nombre
                         </th>
                         <th className="p-3 text-left text-sm font-semibold tracking-wide">
                             Apellido
                         </th>
+                        <th className="p-3 text-left text-sm font-semibold tracking-wide">
+                            Documento
+                        </th>
                         <th className="w-36 p-3 text-left text-sm font-semibold tracking-wide">
-                            Edad
+                            No. Documento
                         </th>
                         <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
                             Telefono
@@ -42,18 +45,22 @@ export default function ListadoClientes({ clientes }) {
                     <tbody className="divide-y divide-gray-100">
                     {clientes?.map((cliente) => (
                         <tr key={cliente.Id}>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
+                            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
                                 {cliente.Nombre}
                             </td>
 
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
+                            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
                                 {cliente.Apellido}
                             </td>
 
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                                {cliente.Edad}
+                            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
+                                {cliente.TipoDocumento?.Tipo}
                             </td>
-                            <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
+
+                            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
+                                {cliente.NumeroDocumento}
+                            </td>
+                            <td className="whitespace-nowrap p-3 text-sm text-gray-700">
                                 {" "}
                                 {cliente.Telefono}
                             </td>
