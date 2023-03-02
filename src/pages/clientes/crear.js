@@ -4,6 +4,7 @@ import { getTipoDocumentos } from "@/utils/api/api";
 import ErrorsList from "../../../components/errorsList";
 import ErrorListProperty from "../../../components/errorListProperty";
 import Dashboard from "../../../layouts/dashboard";
+import BackButton from "components/backbutton";
 
 export const getStaticProps = async () => {
   const tipoDocumentos = await getTipoDocumentos();
@@ -70,6 +71,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
   return (
     <>
       <Dashboard>
+        <BackButton></BackButton>
         <form
           className="my-24 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}

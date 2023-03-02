@@ -1,6 +1,7 @@
 import Dashboard from "../../../../layouts/dashboard";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import BackButton from "components/backbutton";
 
 export async function getStaticPaths() {
   // Aquí puedes obtener la lista de clientes para generar rutas estáticas
@@ -63,6 +64,8 @@ function TipoDocumentoDetalle({ tipoDocumento = {} }) {
   return (
     <>
       <Dashboard>
+        <BackButton></BackButton>
+
         <div className="h-screen flex flex-col justify-start items-center bg-gray-100">
           <h1 className="text-3xl font-bold mt-10">{tipoDocumento.Tipo}</h1>
           <p className="text-lg mt-2">{tipoDocumento.Descripcion}</p>
