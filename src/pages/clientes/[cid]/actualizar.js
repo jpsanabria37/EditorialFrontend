@@ -1,29 +1,66 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { getTipoDocumentos } from "@/utils/api/api";
-import ErrorsList from "../../../components/errorsList";
-import ErrorListProperty from "../../../components/errorListProperty";
-import Dashboard from "../../../layouts/dashboard";
+import ErrorsList from "components/errorsList";
+import ErrorListProperty from "components/errorListProperty";
+import Dashboard from "layouts/dashboard";
 import BackButton from "components/backbutton";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export const getStaticProps = async () => {
-  const tipoDocumentos = await getTipoDocumentos();
-  return { props: { tipoDocumentos } };
-};
+export async function getStaticPaths() {
+  // Aquí puedes obtener la lista de clientes para generar rutas estáticas
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`
+  );
+  const data = await res.json();
+  const clientes = data.Data;
+  // Generamos un array con los IDs de los clientes
+  const ids = clientes.map((cliente) => cliente.Id);
 
-const CrearClienteFormulario = ({ tipoDocumentos }) => {
+  // Generamos las rutas estáticas para cada ID de cliente
+  const paths = ids.map((id) => ({ params: { cid: id.toString() } }));
+
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+  const { cid } = params;
+  const tipoDocumentos = await getTipoDocumentos();
+
+  // Hacemos una petición para obtener los datos del cliente según su ID
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cid}`
+  );
+  const data = await res.json();
+  const cliente = data.Data;
+
+  return {
+    props: {
+      cliente,
+      tipoDocumentos,
+    },
+  };
+}
+
+const ActualizarClienteFormulario = ({ tipoDocumentos, cliente }) => {
   const router = useRouter();
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [email, setEmail] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [numeroDocumento, setNumeroDocumento] = useState("");
-  const [selectedOption, setSelectedOption] = useState(1);
+  const [nombre, setNombre] = useState(cliente.Nombre);
+  const [apellido, setApellido] = useState(cliente.Apellido);
+  const [fechaNacimiento, setFechaNacimiento] = useState(
+    new Date(cliente.FechaNacimiento)
+  );
+
+  const [telefono, setTelefono] = useState(cliente.Telefono);
+  const [email, setEmail] = useState(cliente.Email);
+  const [direccion, setDireccion] = useState(cliente.Direccion);
+  const [numeroDocumento, setNumeroDocumento] = useState(
+    cliente.NumeroDocumento
+  );
+  const [selectedOption, setSelectedOption] = useState(
+    cliente.TipoDocumento.Id
+  );
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,14 +71,15 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
     setSubmitting(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cliente.Id}`,
         {
-          method: "POST",
+          method: "PUT",
           headers: {
             accept: "application/json",
             "content-type": "application/json",
           },
           body: JSON.stringify({
+            id: cliente.Id,
             nombre: nombre,
             apellido: apellido,
             fechaNacimiento: fechaNacimiento,
@@ -64,7 +102,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
         setDireccion("");
         setNumeroDocumento("");
 
-        return router.push("/clientes");
+        return router.back();
       }
       const data = await res.json();
       setErrors(data.errors);
@@ -221,4 +259,4 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
   );
 };
 
-export default CrearClienteFormulario;
+export default ActualizarClienteFormulario;
