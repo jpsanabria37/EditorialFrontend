@@ -51,7 +51,7 @@ const CrearFormularioCategoriaVehiculo = () => {
         <BackButton></BackButton>
 
         <form
-          className="my-24 mx-auto max-w-3xl space-y-6 px-4"
+          className="my-14 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}
         >
           <h1 className=" text-3xl font-semibold"> Crear categoría vehículo</h1>
