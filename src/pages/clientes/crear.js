@@ -5,7 +5,7 @@ import ErrorsList from "../../../components/errorsList";
 import ErrorListProperty from "../../../components/errorListProperty";
 import Dashboard from "../../../layouts/dashboard";
 import BackButton from "components/backbutton";
-
+import { HiCalendar } from "react-icons/hi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -76,7 +76,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
       <Dashboard>
         <BackButton></BackButton>
         <form
-          className=" my-14 mx-auto max-w-3xl space-y-6 px-4"
+          className=" my-14 mx-auto max-w-3xl space-y-6 px-4 "
           onSubmit={handleSubmit}
         >
           {Object.keys(errors).length > 0 && (
@@ -84,106 +84,129 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
           )}
           <h1 className=" text-3xl font-semibold"> Crear cliente</h1>
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-nombre"
-            type="text"
-            onChange={(e) => setNombre(e.target.value)}
-            value={nombre}
-            disabled={submitting}
-            placeholder="Nombre"
-          />
-          {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="...">
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-nombre"
+                type="text"
+                onChange={(e) => setNombre(e.target.value)}
+                value={nombre}
+                disabled={submitting}
+                placeholder="Nombre"
+              />
+              {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+            </div>
+            <div className="...">
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-apellido"
+                type="text"
+                onChange={(e) => setApellido(e.target.value)}
+                value={apellido}
+                disabled={submitting}
+                placeholder="Apellido"
+              />
+            </div>
+          </div>
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-apellido"
-            type="text"
-            onChange={(e) => setApellido(e.target.value)}
-            value={apellido}
-            disabled={submitting}
-            placeholder="Apellido"
-          />
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-1">
+              <select
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+              >
+                {tipoDocumentos.map((option) => (
+                  <option key={option.Id} value={option.Id}>
+                    <span className=" text-center">{option.Tipo}</span>
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-span-2">
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-numeroDocumento"
+                type="text"
+                onChange={(e) => setNumeroDocumento(e.target.value)}
+                value={numeroDocumento}
+                disabled={submitting}
+                placeholder="Número documento"
+                required={true}
+              />
+              {errors.NumeroDocumento && (
+                <ErrorListProperty errors={errors.NumeroDocumento} />
+              )}
+            </div>
+          </div>
 
-          {errors.Apellido && <ErrorListProperty errors={errors.Apellido} />}
+          <div className="grid grid-cols-2 gap-4">
+            <div className=" col-span-1">
+              <DatePicker
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="birthdate"
+                name="fechaNacimiento"
+                selected={fechaNacimiento}
+                onChange={(date) => setFechaNacimiento(date)}
+                dateFormat="dd/MM/yyyy"
+                showYearDropdown
+                yearDropdownItemNumber={100}
+                scrollableYearDropdown
+                placeholderText="Fecha de nacimiento"
+                maxDate={new Date()}
+                strictParsing={true}
+                required
+              >
+                {" "}
+              </DatePicker>
+            </div>
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-telefono"
+                type="text"
+                onChange={(e) => setTelefono(e.target.value)}
+                value={telefono}
+                disabled={submitting}
+                placeholder="Teléfono"
+              />
 
-          <select
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-          >
-            {tipoDocumentos.map((option) => (
-              <option key={option.Id} value={option.Id}>
-                {option.Tipo} - {option.Descripcion}
-              </option>
-            ))}
-          </select>
+              {errors.Telefono && (
+                <ErrorListProperty errors={errors.Telefono} />
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-email"
+                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                disabled={submitting}
+                placeholder="Correo electrónico"
+              />
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-numeroDocumento"
-            type="text"
-            onChange={(e) => setNumeroDocumento(e.target.value)}
-            value={numeroDocumento}
-            disabled={submitting}
-            placeholder="Número documento"
-            required={true}
-          />
+              {errors.Email && <ErrorListProperty errors={errors.Email} />}
+            </div>
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-direccion"
+                type="text"
+                onChange={(e) => setDireccion(e.target.value)}
+                value={direccion}
+                disabled={submitting}
+                placeholder="Dirección"
+              />
 
-          {errors.NumeroDocumento && (
-            <ErrorListProperty errors={errors.NumeroDocumento} />
-          )}
-
-          <label htmlFor="birthdate">Fecha de nacimiento:</label>
-          <DatePicker
-            id="birthdate"
-            name="fechaNacimiento"
-            selected={fechaNacimiento}
-            onChange={(date) => setFechaNacimiento(date)}
-            dateFormat="dd/MM/yyyy"
-            showYearDropdown
-            yearDropdownItemNumber={100}
-            scrollableYearDropdown
-            placeholderText="Selecciona una fecha"
-            maxDate={new Date()}
-            strictParsing={true}
-            required
-          />
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-telefono"
-            type="text"
-            onChange={(e) => setTelefono(e.target.value)}
-            value={telefono}
-            disabled={submitting}
-            placeholder="Teléfono"
-          />
-
-          {errors.Telefono && <ErrorListProperty errors={errors.Telefono} />}
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-email"
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            disabled={submitting}
-            placeholder="Correo electrónico"
-          />
-
-          {errors.Email && <ErrorListProperty errors={errors.Email} />}
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-direccion"
-            type="text"
-            onChange={(e) => setDireccion(e.target.value)}
-            value={direccion}
-            disabled={submitting}
-            placeholder="Dirección"
-          />
-
-          {errors.Direccion && <ErrorListProperty errors={errors.Direccion} />}
+              {errors.Direccion && (
+                <ErrorListProperty errors={errors.Direccion} />
+              )}
+            </div>
+          </div>
 
           <button
             type="submit"
