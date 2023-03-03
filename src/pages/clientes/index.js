@@ -28,15 +28,6 @@ export default function ListadoClientes({ clientes }) {
                 No. Documento
               </th>
               <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                Telefono
-              </th>
-              <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                Email
-              </th>
-              <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
-                Direccion
-              </th>
-              <th className="w-20 p-3 text-left text-sm font-semibold tracking-wide">
                 Acciones
               </th>
             </tr>
@@ -58,16 +49,6 @@ export default function ListadoClientes({ clientes }) {
 
                 <td className="whitespace-nowrap p-3 text-sm text-gray-700">
                   {cliente.NumeroDocumento}
-                </td>
-                <td className="whitespace-nowrap p-3 text-sm text-gray-700">
-                  {" "}
-                  {cliente.Telefono}
-                </td>
-                <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                  {cliente.Email}
-                </td>
-                <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
-                  {cliente.Direccion}
                 </td>
                 <td className=" whitespace-nowrap p-3 text-sm text-gray-700">
                   <Link href={`/clientes/${cliente.Id}`}>

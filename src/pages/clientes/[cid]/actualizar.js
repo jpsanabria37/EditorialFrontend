@@ -120,7 +120,7 @@ const ActualizarClienteFormulario = ({ tipoDocumentos, cliente }) => {
           {Object.keys(errors).length > 0 && (
             <ErrorsList errors={errors}></ErrorsList>
           )}
-          <h1 className=" text-3xl font-semibold"> Crear cliente</h1>
+          <h1 className=" text-3xl font-semibold"> Editar cliente</h1>
 
           <input
             className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
