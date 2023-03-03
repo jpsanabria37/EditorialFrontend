@@ -33,3 +33,15 @@ export async function getMarcas() {
     const data = await response.json();
     return data.Data || [];
 }
+
+export async function getServicios() {
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Servicio`,{
+        method: 'GET',
+        headers: {
+            'accept': 'text/plain'
+        },
+    });
+    const data = await response.json();
+    return data.Data || [];
+}
