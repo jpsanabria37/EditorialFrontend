@@ -8,7 +8,7 @@ export default function CategoriaVehiculosList({ cVehiculos }) {
   return (
     <Dashboard>
       <Link href={"/categoriaVehiculos/crear"}>
-        <button className="mb-4 rounded-full bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700">
+        <button className="bg-transparent  hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-lg mb-6">
           Nuevo categoría vehículos
         </button>
       </Link>
