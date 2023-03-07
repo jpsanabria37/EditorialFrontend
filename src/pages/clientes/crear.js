@@ -5,7 +5,6 @@ import ErrorsList from "../../../components/errorsList";
 import ErrorListProperty from "../../../components/errorListProperty";
 import Dashboard from "../../../layouts/dashboard";
 import BackButton from "components/backbutton";
-import { HiCalendar } from "react-icons/hi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -107,6 +106,9 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 disabled={submitting}
                 placeholder="Apellido"
               />
+              {errors.Apellido && (
+                <ErrorListProperty errors={errors.Apellido} />
+              )}
             </div>
           </div>
 
@@ -141,7 +143,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div className=" col-span-1">
               <DatePicker
                 className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
@@ -157,11 +159,9 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
                 maxDate={new Date()}
                 strictParsing={true}
                 required
-              >
-                {" "}
-              </DatePicker>
+              />
             </div>
-            <div>
+            <div className="col-start-2 col-end-5">
               <input
                 className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
                 id="grid-telefono"
