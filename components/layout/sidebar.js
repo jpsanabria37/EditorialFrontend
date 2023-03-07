@@ -1,5 +1,8 @@
-
-import { BsPeople, BsFillCollectionFill,BsFillFilePersonFill } from "react-icons/bs";
+import {
+  BsPeople,
+  BsFillCollectionFill,
+  BsFillFilePersonFill,
+} from "react-icons/bs";
 import { BsTools } from "react-icons/bs";
 
 import Link from "next/link";
@@ -11,19 +14,8 @@ const sidebar = () => {
         <Link href={"/clientes"}>
           <SideBarIcon icon={<BsPeople />} text="Clientes" />
         </Link>
-
-          <Link href={"/categoriaVehiculos"}>
-              <SideBarIcon icon={<BsFillCollectionFill />} text="Categorias de vehículos" />
-          </Link>
         <Link href={"/servicios"}>
           <SideBarIcon icon={<BsTools />} text="Servicios" />
-          </Link>
-        <Link href={"/marcas"}>
-          <SideBarIcon icon={<BsPeople />} text="Marcas" />
-        </Link>
-
-        <Link href={"/tipodocumentos"}>
-          <SideBarIcon icon={<BsFillFilePersonFill />} text="Tipo Documentos" />
         </Link>
       </div>
     </>

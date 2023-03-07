@@ -76,7 +76,7 @@ const CrearClienteFormulario = ({ tipoDocumentos }) => {
       <Dashboard>
         <BackButton></BackButton>
         <form
-          className=" my-14 mx-auto max-w-3xl space-y-6 px-4 "
+          className="my-14 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}
         >
           {Object.keys(errors).length > 0 && (

@@ -46,7 +46,9 @@ export async function getStaticProps({ params }) {
 
 const ActualizarClienteFormulario = ({ tipoDocumentos, cliente }) => {
   const router = useRouter();
-  const [nombre, setNombre] = useState(cliente.Nombre);
+  const [nombre, setNombre] = useState(
+    cliente && cliente.Nombre ? cliente.Nombre : ""
+  );
   const [apellido, setApellido] = useState(cliente.Apellido);
   const [fechaNacimiento, setFechaNacimiento] = useState(
     new Date(cliente.FechaNacimiento)
@@ -69,159 +71,180 @@ const ActualizarClienteFormulario = ({ tipoDocumentos, cliente }) => {
   async function handleSubmit(e) {
     e.preventDefault();
     setSubmitting(true);
-    try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cliente.Id}`,
-        {
-          method: "PUT",
-          headers: {
-            accept: "application/json",
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            id: cliente.Id,
-            nombre: nombre,
-            apellido: apellido,
-            fechaNacimiento: fechaNacimiento,
-            telefono: telefono,
-            email: email,
-            direccion: direccion,
-            numeroDocumento: numeroDocumento,
-            tipoDocumentoId: parseInt(selectedOption),
-          }),
-        }
-      );
 
-      if (res.ok) {
-        setErrors([]);
-        setNombre("");
-        setApellido("");
-        setFechaNacimiento("");
-        setTelefono("");
-        setEmail("");
-        setDireccion("");
-        setNumeroDocumento("");
-
-        return router.back();
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/Cliente/${cliente.Id}`,
+      {
+        method: "PUT",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          id: cliente.Id,
+          nombre: nombre,
+          apellido: apellido,
+          fechaNacimiento: fechaNacimiento,
+          telefono: telefono,
+          email: email,
+          direccion: direccion,
+          numeroDocumento: numeroDocumento,
+          tipoDocumentoId: parseInt(selectedOption),
+        }),
       }
+    );
+
+    if (res.ok) {
+      setErrors([]);
+      return router.back();
+    } else {
       const data = await res.json();
       setErrors(data.errors);
       setSubmitting(false);
-    } catch (errors) {}
+    }
   }
   return (
     <>
       <Dashboard>
         <BackButton></BackButton>
         <form
-          className=" my-14 mx-auto max-w-3xl space-y-6 px-4"
+          className="my-14 mx-auto max-w-3xl space-y-6 px-4"
           onSubmit={handleSubmit}
         >
-          {Object.keys(errors).length > 0 && (
+          {errors && Object.keys(errors).length > 0 && (
             <ErrorsList errors={errors}></ErrorsList>
           )}
           <h1 className=" text-3xl font-semibold"> Editar cliente</h1>
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-nombre"
-            type="text"
-            onChange={(e) => setNombre(e.target.value)}
-            value={nombre}
-            disabled={submitting}
-            placeholder="Nombre"
-          />
-          {errors.Nombre && <ErrorListProperty errors={errors.Nombre} />}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-nombre"
+                type="text"
+                onChange={(e) => setNombre(e.target.value)}
+                value={nombre}
+                disabled={submitting}
+                placeholder="Nombre"
+              />
+              {errors.Nombre && errors.Nombre.length > 0 && (
+                <ErrorListProperty errors={errors.Nombre} />
+              )}
+            </div>
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-apellido"
+                type="text"
+                onChange={(e) => setApellido(e.target.value)}
+                value={apellido}
+                disabled={submitting}
+                placeholder="Apellido"
+              />
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-apellido"
-            type="text"
-            onChange={(e) => setApellido(e.target.value)}
-            value={apellido}
-            disabled={submitting}
-            placeholder="Apellido"
-          />
+              {errors.Apellido && errors.Apellido.length > 0 && (
+                <ErrorListProperty errors={errors.Apellido} />
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-1">
+              <select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+              >
+                {tipoDocumentos.map((option) => (
+                  <option key={option.Id} value={option.Id}>
+                    {option.Tipo}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-span-2">
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-numeroDocumento"
+                type="text"
+                onChange={(e) => setNumeroDocumento(e.target.value)}
+                value={numeroDocumento}
+                disabled={submitting}
+                placeholder="Número documento"
+                required={true}
+              />
 
-          {errors.Apellido && <ErrorListProperty errors={errors.Apellido} />}
+              {errors.NumeroDocumento && errors.NumeroDocumento.length > 0 && (
+                <ErrorListProperty errors={errors.NumeroDocumento} />
+              )}
+            </div>
+          </div>
 
-          <select
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-          >
-            {tipoDocumentos.map((option) => (
-              <option key={option.Id} value={option.Id}>
-                {option.Tipo} - {option.Descripcion}
-              </option>
-            ))}
-          </select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <DatePicker
+                id="fechaNacimiento"
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                name="fechaNacimiento"
+                selected={fechaNacimiento}
+                onChange={(date) => setFechaNacimiento(date)}
+                dateFormat="dd/MM/yyyy"
+                showYearDropdown
+                yearDropdownItemNumber={100}
+                scrollableYearDropdown
+                placeholderText="Selecciona una fecha"
+                maxDate={new Date()}
+                strictParsing={true}
+                required
+              />
+            </div>
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-telefono"
+                type="text"
+                onChange={(e) => setTelefono(e.target.value)}
+                value={telefono}
+                disabled={submitting}
+                placeholder="Teléfono"
+              />
 
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-numeroDocumento"
-            type="text"
-            onChange={(e) => setNumeroDocumento(e.target.value)}
-            value={numeroDocumento}
-            disabled={submitting}
-            placeholder="Número documento"
-            required={true}
-          />
+              {errors.Telefono && errors.Telefono.length > 0 && (
+                <ErrorListProperty errors={errors.Telefono} />
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-email"
+                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                disabled={submitting}
+                placeholder="Correo electrónico"
+              />
 
-          {errors.NumeroDocumento && (
-            <ErrorListProperty errors={errors.NumeroDocumento} />
-          )}
+              {errors.Email && errors.Email.length > 0 && (
+                <ErrorListProperty errors={errors.Email} />
+              )}
+            </div>
+            <div>
+              <input
+                className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
+                id="grid-direccion"
+                type="text"
+                onChange={(e) => setDireccion(e.target.value)}
+                value={direccion}
+                disabled={submitting}
+                placeholder="Dirección"
+              />
 
-          <label htmlFor="birthdate">Fecha de nacimiento:</label>
-          <DatePicker
-            id="birthdate"
-            name="fechaNacimiento"
-            selected={fechaNacimiento}
-            onChange={(date) => setFechaNacimiento(date)}
-            dateFormat="dd/MM/yyyy"
-            showYearDropdown
-            yearDropdownItemNumber={100}
-            scrollableYearDropdown
-            placeholderText="Selecciona una fecha"
-            maxDate={new Date()}
-            strictParsing={true}
-            required
-          />
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-telefono"
-            type="text"
-            onChange={(e) => setTelefono(e.target.value)}
-            value={telefono}
-            disabled={submitting}
-            placeholder="Teléfono"
-          />
-
-          {errors.Telefono && <ErrorListProperty errors={errors.Telefono} />}
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-email"
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            disabled={submitting}
-            placeholder="Correo electrónico"
-          />
-
-          {errors.Email && <ErrorListProperty errors={errors.Email} />}
-
-          <input
-            className="block w-full rounded border border-gray-400 py-2 px-4 focus:border-teal-500 focus:outline-none"
-            id="grid-direccion"
-            type="text"
-            onChange={(e) => setDireccion(e.target.value)}
-            value={direccion}
-            disabled={submitting}
-            placeholder="Dirección"
-          />
-
-          {errors.Direccion && <ErrorListProperty errors={errors.Direccion} />}
+              {errors.Direccion && errors.Direccion.length > 0 && (
+                <ErrorListProperty errors={errors.Direccion} />
+              )}
+            </div>
+          </div>
 
           <button
             type="submit"
