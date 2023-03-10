@@ -6,6 +6,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
+    const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setCredentials({
@@ -15,7 +16,8 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Account/authenticate`,
       {
@@ -28,50 +30,56 @@ const LoginPage = () => {
       }
     );
 
-    if (res.ok) {
+   if (res.ok) {
       const data = await res.json();
-      console.log(data);
+       // Guardar la cookie en el navegador
+       document.cookie = `access_token=${data.Data.JWToken}`;
+      console.log(data.Data);
+    } else {
+      const data = await res.json();
+      setErrors(data.Data);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    // Mostrar un mensaje de error al usuario
+  }
+};
 
   return (
     <div className="flex w-full h-screen bg-[#879ab5]">
       <div className="w-full flex items-center justify-center lg:w-1/2">
         <div className="bg-white px-10 py-20 rounded-3xl border-2 border-gray-200">
-          <h1 className="text-5xl font-semibold">BIENVENIDO</h1>
-          <p className="font-medium text-lg text-gray-500 mt-4">
-            ¡¡Porfavor Ingrese sus Credenciales!!
-          </p>
+          <h1 className="text-4xl font-semibold text-center">AmiSoft</h1>
           <div className="mt-8">
+          {errors.length > 0 && (
+  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+    <ul>
+      {errors}
+    </ul>
+  </div>
+)}
             <form onSubmit={handleSubmit}>
               <div>
                 <label className="text-lg font-medium">
-                  Correo Electrónico
+                  Correo Electrónico:
                 </label>
                 <input
                   name="email"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  placeholder="Ingrese su usuario"
                   type="email"
                   required={true}
                   onChange={handleChange}
                 />
               </div>
               <div>
-                <label className="text-lg font-medium">Contraseña</label>
+                <label className="text-lg font-medium">Contraseña:</label>
                 <input
                   name="password"
                   className="w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent"
-                  placeholder="Ingrese su contraseña"
                   type="password"
                   required={true}
                   onChange={handleChange}
                 />
-              </div>
-              <div className="mt-8  flex justify-between items-center">
-                <button className="font-medium text-base text-blue-600">
-                  Forgot password
-                </button>
               </div>
               <div className="mt-8 flex flex-col gap-y-4">
                 <button
