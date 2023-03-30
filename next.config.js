@@ -1,10 +1,8 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
-  reactStrictMode: true,
-  experimental: {
-    optimizedRoutes: true,
-  },
-  webpack5: true,
+  /* config options here */
 }
 
-module.exports = nextConfig
+export default nextConfig

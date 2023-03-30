@@ -6,7 +6,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-    const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setCredentials({
@@ -16,34 +16,34 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Account/authenticate`,
-      {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      }
-    );
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/Account/authenticate`,
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        }
+      );
 
-   if (res.ok) {
-      const data = await res.json();
-       // Guardar la cookie en el navegador
-       document.cookie = `access_token=${data.Data.JWToken}`;
-      console.log(data.Data);
-    } else {
-      const data = await res.json();
-      setErrors(data.Data);
+      if (res.ok) {
+        const data = await res.json();
+        // Guardar la cookie en el navegador
+        document.cookie = `access_token=${data.Data.JWToken}`;
+        console.log(data.Data);
+      } else {
+        const data = await res.json();
+        setErrors(data.Data);
+      }
+    } catch (error) {
+      console.error(error);
+      // Mostrar un mensaje de error al usuario
     }
-  } catch (error) {
-    console.error(error);
-    // Mostrar un mensaje de error al usuario
-  }
-};
+  };
 
   return (
     <div className="flex w-full h-screen bg-[#879ab5]">
@@ -51,13 +51,11 @@ const LoginPage = () => {
         <div className="bg-white px-10 py-20 rounded-3xl border-2 border-gray-200">
           <h1 className="text-4xl font-semibold text-center">AmiSoft</h1>
           <div className="mt-8">
-          {errors.length > 0 && (
-  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-    <ul>
-      {errors}
-    </ul>
-  </div>
-)}
+            {errors.length > 0 && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                <ul>{errors}</ul>
+              </div>
+            )}
             <form onSubmit={handleSubmit}>
               <div>
                 <label className="text-lg font-medium">
